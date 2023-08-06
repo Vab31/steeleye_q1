@@ -128,10 +128,12 @@ List.jsx
 
 
 temp_func:
+
 This function logs the value of externaldata to the console.
 It dispatches a Redux action with type "getData_action" and the value of externaldata as the payload.
 
 temp_func1:
+
 Similar to temp_func, this function logs the value of externaltime.
 It dispatches a Redux action with type "getData_action1" and the value of externaltime as the payload.
 
