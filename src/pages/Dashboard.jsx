@@ -9,25 +9,55 @@ import Dropdown from "../component/dropdown/Dropdown";
 import HeaderTitle from "../component/header-title/HeaderTitle";
 import Search from "../component/search/Search";
 import List from "../component/list/List";
-
-// Styles
+// import { connect } from 'react-redux';
 import styles from "./Dashboard.module.css";
 import Card from "../component/card/Card";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-const Dashboard = () => {
+const Dashboard = ( {jsonData}) => {
   const [currency, setCurrency] = useState("EUR");
   const [searchText, setSearchText] = useState("");
   const [selectedOrderDetails, setSelectedOrderDetails] = useState({});
   const [selectedOrderTimeStamps, setSelectedOrderTimeStamps] = useState({});
+  const [count,setCount]=useState(0);
+  console.log(jsonData);
+  const selectedRow_selector = useSelector(state => {
+    const {selectedRow_reducer} = state;
+    return selectedRow_reducer;
+    // return state;
+  })
+  const selectedTime_selector = useSelector(state => {
+    const {selectedTime_reducer} = state;
+    return selectedTime_reducer;
+    // return state;
+  })
+ 
+  
+  useEffect(()=>{ 
+ 
+  
+    console.log("selectedRow_selector : ", selectedRow_selector)
+    console.log("selectedTime_selector : ", selectedTime_selector)
+    console.log(timestamps.results[0].timestamps.orderSubmitted);
+    
+    setCount(mockData.results.length);
+  })
+  useEffect(()=>{
+    setSelectedOrderDetails(selectedRow_selector)
+    setSelectedOrderTimeStamps(selectedTime_selector)
+  },[selectedRow_selector,selectedTime_selector])
 
+  // const [data, setData] = useState("");
+
+  
   return (
     <div>
       <div className={styles.header}>
-        <HeaderTitle primaryTitle="Orders" secondaryTitle="5 orders" />
+        <HeaderTitle primaryTitle="Orders" secondaryTitle={count} />
         <div className={styles.actionBox}>
           <Search
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            
           />
           <Dropdown
             options={["GBP", "USD", "JPY", "EUR"]}
@@ -47,10 +77,12 @@ const Dashboard = () => {
             title="Selected Order Timestamps"
           />
         </div>
-        <List rows={mockData.results} />
+        <List rows={mockData.results} timestamps={timestamps.results} curVal={currency} />
+
       </div>
     </div>
   );
 };
+
 
 export default Dashboard;
